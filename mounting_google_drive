@@ -1,0 +1,18 @@
+# Detect if we are in Google Colaboratory
+try:
+    import google.colab
+    IN_COLAB = True
+except ImportError:
+    IN_COLAB = False
+
+from pathlib import Path
+# Determine the locations of auxiliary libraries and datasets.
+if IN_COLAB:
+    google.colab.drive.mount("/content/drive")
+    
+    # Change this if you created the shortcut in a different location
+    AUX_DATA_ROOT = Path("/content/drive/My Drive/...")
+    
+    assert AUX_DATA_ROOT.is_dir(), "Have you forgot to 'Add a shortcut to Drive'?"
+else:
+    AUX_DATA_ROOT = Path(".")

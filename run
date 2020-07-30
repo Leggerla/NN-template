@@ -1,0 +1,30 @@
+from torch.utils.data import DataLoader
+from torch.optim import lr_scheduler
+import random 
+
+batch_size = 512
+lr = 1e-2
+wd = 1
+
+SEED = 1337
+random.seed(SEED)
+torch.manual_seed(SEED)
+torch.cuda.manual_seed(SEED)
+torch.backends.cudnn.deterministic = True
+
+train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+val_loader = DataLoader(val_dataset, batch_size=len(val_dataset), shuffle=False)
+    
+    
+model = stock_model().float()
+
+########################################################################################
+N_EPOCHS = 100
+LR = lr
+
+optimizer = torch.optim.Adam(model.parameters(), lr=LR, weight_decay=wd)
+scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, patience=1, verbose=True)
+criterion = nn.MSELoss()
+
+train_class = TrainingModule(model, optimizer, criterion, train_loader, val_loader, N_EPOCHS, scheduler=scheduler)
+list_train_loss, list_val_loss, list_train_error, list_val_error = train_class.train()
